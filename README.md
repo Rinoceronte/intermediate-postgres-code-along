@@ -19,6 +19,8 @@ When creating tables we can specify a column as having a foreign key. The dataty
 
 ### Solution
 
+CREATE TABLE movie (movie_id SERIAL, title TEXT, media_type_id INTEGER, FOREIGN KEY (media_type_id) REFERENCES media_type(media_type_id));
+
 <details>
 
 <summary> <code> SQL Solutions </code> </summary>
@@ -72,6 +74,7 @@ We can also add a foreign key to an existing table. Let's add one to our `movie`
 * Query the `movie` table to see your entry.
 
 ### Solution
+ALTER TABLE movie ADD COLUMN genre_id INTEGER REFERENCES genre(genre_id)
 
 <details>
 
@@ -111,6 +114,7 @@ We don't want to leave the `genre_id` equal to `null` so let's add a value using
 * Query the `movie` table to see your entry.
 
 ### Solution
+UPDATE movie SET genre_id=22 WHERE movie_id=1;
 
 <details>
 
@@ -149,6 +153,7 @@ Now that we know how to make foreign keys and change data, let's do some practic
 * Join the `artist` and `album` tables to list out the artist name and album name.
 
 ### Solution
+  SELECT album.title, artist.name FROM album JOIN artist ON album.artist_id = artist.artist_id
 
 <details>
 
@@ -173,6 +178,7 @@ The next way to use a primary key is with a nested query/sub-select statement. B
 * Use a sub-select statement to get all tracks from the `Track` table where the `genre_id` is either `Jazz` or `Blues`.
 
 ### Solution
+SELECT * FROM track WHERE genre_id IN ( SELECT genre_id FROM genre WHERE name IN ('Jazz', 'Blues'))
 
 <details>
 
@@ -193,6 +199,7 @@ WHERE genre_id IN ( SELECT genre_id FROM genre WHERE name = 'Jazz' OR name = 'Bl
 * Query the `Employee` table to get the employee you just updated.
 
 ### Solution
+UPDATE employee SET phone = null WHERE employee_id = 1 
 
 <details>
 
@@ -231,6 +238,7 @@ Sometimes you want to know when there is no value. For example, let's use the `c
 * Get all customers from the `customer` table who do not have a company.
 
 ### Solution
+SELECT * FROM customer WHERE company IS null
 
 <details>
 
@@ -253,6 +261,7 @@ How many albums does each artist have? We could count manually, but no! Group by
 * Select all artist ids, artist names, and count how many albums they have.
 
 ### Solution
+SELECT a.artist_id, a.name, COUNT(al.*) FROM artist a JOIN album al ON a.artist_id = al.artist_id GROUP BY a.artist_id
 
 <details>
 
@@ -271,6 +280,9 @@ GROUP BY ar.artist_id;
 
 Modify the solution to order the album count by largest to smallest.
 
+SELECT a.artist_id, a.name, COUNT(al.*) FROM artist a JOIN album al ON a.artist_id = al.artist_id GROUP BY a.artist_id
+ORDER BY count DESC
+
 ## Distinct
 
 ### Summary
@@ -282,6 +294,7 @@ Distinct is great if you want to get a dataset with no duplicates.
 * Get all countries from the `customer` table with no duplicates.
 
 ### Solution
+SELECT DISTINCT country FROM customer
 
 <details>
 
@@ -305,6 +318,7 @@ Deleting rows can be dangerous if you are not cautious. Always do a select of wh
 * Delete all records from the `customer` table where fax is null;
 
 ### Solution
+DELETE FROM customer WHERE fax IS null
 
 <details>
 
